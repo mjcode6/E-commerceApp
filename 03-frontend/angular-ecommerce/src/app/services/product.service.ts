@@ -10,13 +10,19 @@ import { map } from 'rxjs/operators';
 })
 export class ProductService {
 
-  private basrUrl = 'http://localhost:8080/api/products?size=100';
+  private baseUrl = 'http://localhost:8080/api/products';
 
   constructor(private httpClient: HttpClient) { }
 
 
-  getProductList(): Observable<Product[]>{
-    return this.httpClient.get<GetResponse>(this.basrUrl).pipe(map(response => response._embedded.products));
+  getProductList(theCategoryId: number): Observable<Product[]>{
+
+   const searchUrl = `${this.baseUrl}/search/findByCategoryId?id=${theCategoryId}`;
+
+
+
+
+    return this.httpClient.get<GetResponse>(searchUrl).pipe(map(response => response._embedded.products));
   }
 }
 
