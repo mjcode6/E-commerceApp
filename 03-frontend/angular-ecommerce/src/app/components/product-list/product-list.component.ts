@@ -13,6 +13,7 @@ import { ActivatedRoute } from '@angular/router';
 export class ProductListComponent implements OnInit {
   products: Product[] = [];
   currentCategoryId: number = 1;
+  currentCategoryName: string = "";
 
 
   constructor(private productService: ProductService,
@@ -32,13 +33,16 @@ export class ProductListComponent implements OnInit {
     // check if "id" parameter is available
     const hasCategoryId: boolean = this.route.snapshot.paramMap.has('id');
 
-    if(hasCategoryId){
-      // get the 'id' param string. then convert to a number using by '+' symbol
+    if (hasCategoryId) {
+      // get the "id" param string. convert string to a number using the "+" symbol
       this.currentCategoryId = +this.route.snapshot.paramMap.get('id')!;
+ 
+      // get the "name" param string
+      this.currentCategoryName = this.route.snapshot.paramMap.get('name')!;
     }else {
       // if category in is not available ... default to category id number 1
       this.currentCategoryId = 1;
-
+      this.currentCategoryName = 'Books';
     }
     
     // now get the product for the given category id
