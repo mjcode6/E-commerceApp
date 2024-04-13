@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Product } from '../../common/product';
+import { ProductService } from '../../services/product.service';
 import { ActivatedRoute } from '@angular/router';
 
-import { ProductService } from '../../services/product.service';
+
+
 
 @Component({
   selector: 'app-product-details',
@@ -16,6 +18,7 @@ export class ProductDetailsComponent implements OnInit{
 
   constructor(private productService: ProductService,
     private route: ActivatedRoute
+    
   ){
 
   }
