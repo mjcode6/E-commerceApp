@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ProductService } from '../../services/product.service';
+
 import { Product } from '../../common/product';
 import { ActivatedRoute } from '@angular/router';
+import { ProductService } from '../../services/product.service';
 
 @Component({
   selector: 'app-product-list',
@@ -38,11 +39,12 @@ export class ProductListComponent implements OnInit {
     }else{
       this.handleListProducts();
     }
-this.handleListProducts();
     
-  }
+ }
+
+
   handleSearchProducts() {
-   const theKeyWord = this.route.snapshot.paramMap.get('keyword')!;
+   const theKeyWord:string = this.route.snapshot.paramMap.get('keyword')!;
 
    // now search forthe product using keyword
    this.productService.searchProducts(theKeyWord).subscribe(
