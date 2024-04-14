@@ -4,6 +4,8 @@ import { Product } from '../../common/product';
 import { ActivatedRoute } from '@angular/router';
 import { ProductService } from '../../services/product.service';
 
+
+
 @Component({
   selector: 'app-product-list',
  
@@ -14,8 +16,16 @@ import { ProductService } from '../../services/product.service';
 export class ProductListComponent implements OnInit {
   products: Product[] = [];
   currentCategoryId: number = 1;
+  previousCategoryId: number = 1;
   currentCategoryName: string = "";
   searchMode: boolean = false;
+
+  // new properties for pagination
+
+  thePageNumber: number = 1;
+  thePageSize: number = 10;
+  theTotalElements: number = 0;
+  
 
 
   constructor(private productService: ProductService,
@@ -70,13 +80,38 @@ if (hasCategoryId) {
   this.currentCategoryName = 'Books';
 }
 
+
+
+//
+// check if we have diffrent category than previous
+// note: Angular will reuse the component if it is currently viewed
+
+// if we have a diffrent category id than previous
+// then set a pageNumber back to one
+
+if(this.previousCategoryId != this.currentCategoryId){
+  this.thePageNumber = 1;
+}
+
+this.previousCategoryId = this.currentCategoryId;
+console.log(`currentCategoryId=${this.currentCategoryId}, thePageNumber=${this.thePageNumber}`);
+
 // now get the product for the given category id
 
-this.productService.getProductList(this.currentCategoryId).subscribe(
+
+
+this.productService.getProductListPaginate(this.thePageNumber - 1,
+                                          this.thePageSize,
+                                          this.currentCategoryId
+).subscribe(
   data => {
-    this.products = data;
+    this.products = data._embedded.products;
+    this.thePageNumber = data.page.number + 1;
+    this.thePageSize = data.page.size;
+    this.theTotalElements = data.page.totalElements;
   }
-)
+);
+
   }
   
 }
