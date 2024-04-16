@@ -25,6 +25,10 @@ export class ProductListComponent implements OnInit {
   thePageNumber: number = 1;
   thePageSize: number = 5;
   theTotalElements: number = 0;
+
+
+  previousKeyword: string = "";
+  theKeyWord: any;
   
 
 
@@ -56,12 +60,26 @@ export class ProductListComponent implements OnInit {
   handleSearchProducts() {
    const theKeyWord:string = this.route.snapshot.paramMap.get('keyword')!;
 
+// if we have diffrent keyword than previous 
+
+//then set thePageNumber to 1
+//
+//
+
+if(this.previousKeyword != theKeyWord){
+  this.thePageNumber = 1;
+}
+
+this.previousKeyword = theKeyWord;
+
+console.log(`theKeyword=${this.theKeyWord}, thePageNumber=${this.thePageNumber}`);
+
    // now search forthe product using keyword
-   this.productService.searchProducts(theKeyWord).subscribe(
-    data => {
-      this.products = data;
-    }
-   );
+   this.productService.searchProductsPaginate(this.thePageNumber - 1,
+                                              this.thePageSize,
+                                              theKeyWord
+   ).subscribe(this.processResult());
+   
   }
 
   handleListProducts(){
@@ -104,12 +122,7 @@ this.productService.getProductListPaginate(this.thePageNumber - 1,
                                           this.thePageSize,
                                           this.currentCategoryId
 ).subscribe(
-  data => {
-    this.products = data._embedded.products;
-    this.thePageNumber = data.page.number + 1;
-    this.thePageSize = data.page.size;
-    this.theTotalElements = data.page.totalElements;
-  }
+ this.processResult()
 );
 
   }
@@ -119,6 +132,16 @@ this.productService.getProductListPaginate(this.thePageNumber - 1,
     this.thePageSize = +pageSize;
     this.thePageNumber = 1;
     this.listProducts();
+  }
+
+  processResult(){
+    return(data: any) => {
+     
+      this.products = data._embedded.products;
+      this.thePageNumber = data.page.number + 1;
+      this.thePageSize = data.page.size;
+      this.theTotalElements = data.page.totalElements;
+    }
   }
   
 }
