@@ -144,4 +144,12 @@ this.productService.getProductListPaginate(this.thePageNumber - 1,
     }
   }
   
+addToCart(theProduct: Product){
+console.log(`Add to Cart: ${theProduct.name}, ${theProduct.unitPrice}`);
+
+// have to do some real work..
+}
+
+
+
 }
