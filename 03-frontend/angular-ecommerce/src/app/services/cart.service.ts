@@ -18,27 +18,27 @@ export class CartService {
   addToCart(theCartItem: CartItem){
     // check if we already have item in our cart
 let alreadyExistsInCart: boolean = false;
-let exisitingCatrItem!: CartItem;
+let exisitingCartItem!: CartItem;
+
+
+if (exisitingCartItem !== undefined) {
+  exisitingCartItem.quantity++;
+}
 
 
 if(this.cartItems.length > 0){
 //  find the item in the cart based on item id
-for(let tempCartItem of this.cartItems){
-  if(tempCartItem.id === theCartItem.id){
-    exisitingCatrItem = tempCartItem;
-    break;
-  }
-}
+  exisitingCartItem = this.cartItems.find(tempCartItem => tempCartItem.id === theCartItem.id)!;
 
     // check if we found it
 
-   alreadyExistsInCart = (exisitingCatrItem != undefined);
+   alreadyExistsInCart = (exisitingCartItem != undefined);
 
 }
 if(alreadyExistsInCart){
  // increment the quantity
 
- exisitingCatrItem.quantity++;
+ exisitingCartItem.quantity++;
 
 }else{
   // just add the item in to the array
