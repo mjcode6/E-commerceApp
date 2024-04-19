@@ -6,6 +6,7 @@ import { Subject } from 'rxjs';
   providedIn: 'root'
 })
 export class CartService {
+ 
 
   cartItems: CartItem[] = [];
 
@@ -83,5 +84,31 @@ if(alreadyExistsInCart){
 
     console.log("_____");
 }
+
+
+
+decrementQuantity(tempCartItem: CartItem) {
+  tempCartItem.quantity--;
+
+  if(tempCartItem.quantity === 0){
+    this.remove(tempCartItem);
+  }else{
+    this.computeCartTotals();
+  }
+}
+  remove(theCartItem: any) {
+    // get index of item in array
+
+    const itemIndex = this.cartItems.findIndex(tempCartItem => tempCartItem.id === theCartItem.id);
+
+    // if you found, remove the item from a array at the given index
+
+    if(itemIndex > -1){
+      this.cartItems.splice(itemIndex, 1);
+      this.computeCartTotals();
+    }
+
+
+  }
 
 }
