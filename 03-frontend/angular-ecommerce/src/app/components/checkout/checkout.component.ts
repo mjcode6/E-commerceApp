@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { X8shoppingFormService } from '../../services/x8shopping-form.service';
 
 @Component({
   selector: 'app-checkout',
@@ -11,7 +12,12 @@ export class CheckoutComponent implements OnInit{
   totalPrice: number = 0;
   totalQuantity: number = 0;
 
-constructor(private formBuilder: FormBuilder){
+  creditCardYears: number[] = [];
+  creditCardMonths: number[] = [];
+
+constructor(private formBuilder: FormBuilder,
+  private x8ShoppingFormService: X8shoppingFormService
+){
 
 }
 
@@ -58,6 +64,31 @@ creditCardAddress: this.formBuilder.group({
 
 
    });
+
+// populate credit card months
+const startMonth: number = new Date().getMonth() + 1;
+console.log("start montn " + startMonth);
+
+this.x8ShoppingFormService.getCreditCardMonths(startMonth).subscribe(
+  data => {
+    console.log("Retrived credit card month: " + JSON.stringify(data));
+    this.creditCardMonths = data;
+  }
+
+);
+
+
+// populate credit card years
+
+this.x8ShoppingFormService.getCreditCardYears().subscribe(
+  data => {
+    console.log("Retrived credit card year: " + JSON.stringify(data));
+    this.creditCardYears = data;
+  }
+
+);
+
+
   }
 
   copyShippingAddressToBillingAddress(event: Event) {
