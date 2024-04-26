@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { X8shoppingFormService } from '../../services/x8shopping-form.service';
+import { Country } from '../../common/country';
+import { State } from '../../common/state';
 
 @Component({
   selector: 'app-checkout',
@@ -14,6 +16,12 @@ export class CheckoutComponent implements OnInit{
 
   creditCardYears: number[] = [];
   creditCardMonths: number[] = [];
+
+  countries: Country[] = [];
+
+  shippingAddressStates: State[] = [];
+  billingAddressStates: State[] = [];
+
 
 constructor(private formBuilder: FormBuilder,
   private x8ShoppingFormService: X8shoppingFormService
@@ -88,6 +96,15 @@ this.x8ShoppingFormService.getCreditCardYears().subscribe(
 
 );
 
+// populate countries
+
+this.x8ShoppingFormService.getCountries().subscribe(
+  data => {
+    console.log("Retrived countries: " + JSON.stringify(data));
+    this.countries = data;
+  }
+);
+
 
   }
 
@@ -136,5 +153,13 @@ this.x8ShoppingFormService.getCreditCardYears().subscribe(
       }
     );
   }
-  
+  getStates(formGroupName: string){
+     const formGroup = this.checkoutFormGroup.get(formGroupName);
+
+     const countryCode = formGroup?.value.country.code;
+     const countryName = formGroup?.value.country.name;
+
+     console.log(`{formGroupName} countryCode: ${countryCode}`);
+     console.log(`{formGroupName} countryName: ${countryName}`);
+  }
 }
